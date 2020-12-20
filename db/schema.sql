@@ -1,6 +1,6 @@
 CREATE TABLE department (
   id INTEGER PRIMARY KEY,
-  department_name VARCHAR(30) NOT NULL,
+  department_name VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE roles (
@@ -15,6 +15,8 @@ CREATE TABLE employee (
   id INTEGER PRIMARY KEY,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
-  role_id INTEGER UNSIGNED,
+  roles_id INTEGER UNSIGNED,
+  manager_id INTEGER UNSIGNED,
   CONSTRAINT fk_roles FOREIGN KEY (roles_id) REFERENCES roles(id) ON DELETE SET NULL
+  CONSTRAINT fk_manager FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE SET NULL
 );
