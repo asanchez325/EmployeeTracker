@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "db/tracker.db -init db/schema.sql",
-    "seed": "db/tracker.db -init db/seeds.sql",
+    "migrate": "sqlite3 db/tracker.db -init db/schema.sql",
+    "seed": "sqlite3 db/tracker.db -init db/seeds.sql",
     "db": "db/tracker.db",
     "start": "node server.js"
   },

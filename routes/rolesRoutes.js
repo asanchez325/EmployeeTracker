@@ -1,10 +1,16 @@
-const router = ('express').Router();
-const {department} = require('../db/tracker');
+const express = require('express');
+const router = express.Router();
+const db = require('../../db/database');
+const inputCheck = require('../../utils/inputCheck');
 
-// Get all department
+// Get all roles and their department affiliation
 router.get('/roles', (req, res) => {
-  const sql = `SELECT * FROM roles`;
-  let params = [];
+  const sql =  `SELECT roles.*, department.name 
+                AS department_name 
+                FROM roles 
+                LEFT JOIN department 
+                ON roles.department_id = department.id`;
+  const params = [];
   db.all(sql, params, (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -18,9 +24,14 @@ router.get('/roles', (req, res) => {
   });
 });
 
-// Get single department
+// Get single role with department affliliation
 router.get('/roles/:id', (req, res) => {
-  const sql = `SELECT * FROM department WHERE id = ?`;
+  const sql = `SELECT roles.*, department.name 
+               AS department_name 
+               FROM roles 
+               LEFT JOIN department 
+               ON roles.department_id = department.id 
+               WHERE roles.id = ?`;
   const params = [req.params.id];
   db.get(sql, params, (err, rows) => {
     if (err) {
@@ -35,16 +46,67 @@ router.get('/roles/:id', (req, res) => {
   });
 });
 
-// Delete a department
+// Create a role
+router.post('/roles', ({ body }, res) => {
+  // Roles is allowed to have no department affiliation
+  const errors = inputCheck(body, 'first_name', 'last_name', 'industry_connected');
+  if (errors) {
+    res.status(400).json({ error: errors });
+    return;
+  }
+
+  const sql = `INSERT INTO roles (first_name, last_name, industry_connected, department_id) VALUES (?,?,?,?)`;
+  const params = [body.first_name, body.last_name, body.industry_connected, body_department_id];
+  // function,not arrow, to use this
+  db.run(sql, params, function(err, result) {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+
+    res.json({
+      message: 'success',
+      data: body,
+      id: this.lastID
+    });
+  });
+});
+
+// Update a roles's department
+router.put('/roles/:id', (req, res) => {
+  // Data validation 
+  const errors = inputCheck(req.body, 'department_id');
+  if (errors) {
+    res.status(400).json({ error: errors });
+    return;
+  }
+
+  const sql = `UPDATE roles SET department_id = ? WHERE id = ?`;
+  const params = [req.body.department_id, req.params.id];
+  // function,not arrow, to use this
+  db.run(sql, params, function(err, result) {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+
+    res.json({
+      message: 'success',
+      data: req.body,
+      id: this.lastID
+    });
+  });
+});
+
+// Delete a role
 router.delete('/roles/:id', (req, res) => {
-  const sql = `DELETE FROM department WHERE id = ?`;
+  const sql = `DELETE FROM roles WHERE id = ?`;
   const params = [req.params.id];
   db.run(sql, params, function(err, result) {
     if (err) {
       res.status(400).json({ error: res.message });
       return;
     }
-
     res.json({ message: 'deleted', changes: this.changes });
   });
 });

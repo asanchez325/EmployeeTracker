@@ -1,6 +1,6 @@
-const router = ('express').Router();
-const {findById, createNewDepartment, deleteDepartment} = require('../lib/department');
-const {department} = require('../db/tracker');
+const express = require('express');
+const router = express.Router();
+const db = require('../../db/database');
 
 // Get all department
 router.get('/department', (req, res) => {
