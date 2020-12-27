@@ -49,14 +49,14 @@ router.get('/roles/:id', (req, res) => {
 // Create a role
 router.post('/roles', ({ body }, res) => {
   // Roles is allowed to have no department affiliation
-  const errors = inputCheck(body, 'first_name', 'last_name', 'industry_connected');
+  const errors = inputCheck(body, 'title', 'salary');
   if (errors) {
     res.status(400).json({ error: errors });
     return;
   }
 
-  const sql = `INSERT INTO roles (first_name, last_name, industry_connected, department_id) VALUES (?,?,?,?)`;
-  const params = [body.first_name, body.last_name, body.industry_connected, body_department_id];
+  const sql = `INSERT INTO roles (title, salary, department_id) VALUES (?,?,?)`;
+  const params = [body.title, body.salary, body.department_id];
   // function,not arrow, to use this
   db.run(sql, params, function(err, result) {
     if (err) {

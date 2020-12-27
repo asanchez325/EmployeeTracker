@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS employee;
 
 CREATE TABLE department (
   id INTEGER PRIMARY KEY,
-  department_name VARCHAR(30) NOT NULL
+  name VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE roles (
@@ -22,6 +22,6 @@ CREATE TABLE employee (
   last_name VARCHAR(30) NOT NULL,
   roles_id INTEGER UNSIGNED,
   manager_id INTEGER UNSIGNED,
-  CONSTRAINT fk_roles FOREIGN KEY (roles_id) REFERENCES roles(id) ON DELETE SET NULL
+  CONSTRAINT fk_roles FOREIGN KEY (roles_id) REFERENCES roles(id) ON DELETE SET NULL,
   CONSTRAINT fk_manager FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE SET NULL
 );

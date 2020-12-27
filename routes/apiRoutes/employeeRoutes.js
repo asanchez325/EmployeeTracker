@@ -5,11 +5,17 @@ const inputCheck = require('../../utils/inputCheck');
 
 // Get all employees and their roles affiliation
 router.get('/employee', (req, res) => {
-  const sql =  `SELECT employees.*, roles.name 
-                AS roles_name 
+  const sql =  `SELECT employee.*, roles.title 
+                AS roles_title 
                 FROM employee
                 LEFT JOIN roles
                 ON employee.roles_id = roles.id`;
+                `SELECT employee.*, employee.first_name 
+                AS employee_first_name
+                FROM employee 
+                LEFT JOIN employee 
+                ON employee.manager_id = employee.id 
+                WHERE employee.id = ?`;
   const params = [];
   db.all(sql, params, (err, rows) => {
     if (err) {
@@ -26,12 +32,19 @@ router.get('/employee', (req, res) => {
 
 // Get single employee with roles affliliation
 router.get('/employee/:id', (req, res) => {
-  const sql = `SELECT employee.*, roles.name 
-               AS roles_name 
+  const sql = `SELECT employee.*, roles.title 
+               AS roles_title
                FROM employee 
                LEFT JOIN roles 
                ON employee.roles_id = roles.id 
                WHERE employee.id = ?`;
+               `SELECT employee.*, manager.name 
+               AS employee_manager
+               FROM employee 
+               LEFT JOIN employee 
+               ON employee.manager_id = employee.id 
+               WHERE employee.id = ?`;
+
   const params = [req.params.id];
   db.get(sql, params, (err, rows) => {
     if (err) {
@@ -49,14 +62,14 @@ router.get('/employee/:id', (req, res) => {
 // Create a employee
 router.post('/employee', ({ body }, res) => {
   // employee is allowed to have no role affiliation
-  const errors = inputCheck(body, 'first_name', 'last_name', 'industry_connected');
+  const errors = inputCheck(body, 'first_name', 'last_name', 'manager_id');
   if (errors) {
     res.status(400).json({ error: errors });
     return;
   }
 
-  const sql = `INSERT INTO employee (first_name, last_name, industry_connected, roles_id) VALUES (?,?,?,?)`;
-  const params = [body.first_name, body.last_name, body.industry_connected, body_roles_id];
+  const sql = `INSERT INTO employee (first_name, last_name, roles_id, manager_id) VALUES (?,?,?,?)`;
+  const params = [body.first_name, body.last_name, body.roles_id, body.manager_id];
   // function,not arrow, to use this
   db.run(sql, params, function(err, result) {
     if (err) {
