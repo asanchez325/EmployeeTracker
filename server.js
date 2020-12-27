@@ -1,3 +1,4 @@
+//this file will only be used to run test in insomnia core
 const express = require('express');
 const db = require('./db/database');
 

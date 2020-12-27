@@ -1,11 +1,12 @@
-const sqlite3 = require('sqlite3').verbose();
+const mysql = require("mysql2")
 
-// Connect to database 
-const db = new sqlite3.Database('./db/tracker.db', err => {
-  if (err) {
-    return console.error(err.message);
-  }
-  console.log('Connected to the tracker database.');
-});
+const connection = mysql.createConnection({
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "KnoxFox#25",
+    database: "tracker_db"
+  });
 
-module.exports = db;
+  module.exports = connection;
+
