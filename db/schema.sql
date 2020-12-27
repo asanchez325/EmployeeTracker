@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS department;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS employee;
+
+
 CREATE TABLE department (
   id INTEGER PRIMARY KEY,
   department_name VARCHAR(30) NOT NULL
