@@ -1,12 +1,10 @@
-USE tracker_db,
-
 INSERT INTO department (department_name)
 Values
     ('Sales'),
     ('Tech Support'),
     ('Security'),
     ('Customer Service');
-    
+;
 
 INSERT INTO roles (title, salary, department_id)
 Values
@@ -18,6 +16,8 @@ Values
     ('Manager', '90,000', 2),
     ('Manager', '90,000', 3),
     ('Manager', '90,000', 4);
+
+;
 
 INSERT INTO employee (first_name, last_name, roles_id, manager_id)
 VALUES
@@ -41,3 +41,5 @@ VALUES
   ('Sandy', 'Powell', 4, 8),
   ('Emil', 'Zola', 4, 8),
   ('Sissy', 'Coalpits', 4, 8);
+
+  ;

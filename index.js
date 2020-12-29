@@ -78,14 +78,14 @@ function viewAllDepartments() {
 
 function viewAllRoles() {
   connection.query("SELECT * FROM roles", function(err, answer) {
-    console.log("\n Departments Retrieved from Database \n");
+    console.log("\n Roles Retrieved from Database \n");
     console.table(answer);
   });
   welcome();
 }
 function viewAllEmployees() {
-  connection.query("SELECT * FROM department", function(err, answer) {
-    console.log("\n Departments Retrieved from Database \n");
+  connection.query("SELECT * FROM employee", function(err, answer) {
+    console.log("\n Employees Retrieved from Database \n");
     console.table(answer);
   });
   welcome();
