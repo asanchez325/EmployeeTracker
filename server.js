@@ -1,4 +1,4 @@
-//this file will only be used to run test in insomnia core
+/*this file will only be used to run test in insomnia core
 const express = require('express');
 const db = require('./db/database');
 
@@ -23,4 +23,4 @@ db.on('open', () => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
-});
+});*/
