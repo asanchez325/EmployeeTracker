@@ -1,4 +1,6 @@
-INSERT INTO department (name)
+USE tracker_db,
+
+INSERT INTO department (department_name)
 Values
     ('Sales'),
     ('Tech Support'),

@@ -1,6 +1,7 @@
-DROP TABLE IF EXISTS department;
-DROP TABLE IF EXISTS roles;
-DROP TABLE IF EXISTS employee;
+DROP DATABASE IF EXISTS tracker_db;
+CREATE DATABASE tracker_db;
+
+USE tracker_db;
 
 
 CREATE TABLE department (
