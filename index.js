@@ -3,13 +3,11 @@ const inquirer = require("inquirer");
 const cTable = require("console.table");
 const mysql = require("mysql2");
 
-
-
 const welcome = function() {
   inquirer
   .prompt({
       type: "list",
-      name: "welcome",
+      name: "questions",
       message: "Welcome to the Employee Tracker Database! Where would you like to start?",
       choices: [
         "View All Departments",
@@ -29,11 +27,13 @@ const welcome = function() {
   
     .then(function(answer) {
       console.log(answer);
-      switch (answer.welcome) {
+      switch (answer.questions) {
         case "View All Departments":
           viewAllDepartments ();
+        break;
         case "View All Roles":
           viewAllRoles ();
+        break;
         case "View All Employees":
           viewAllEmployees ();
         break;
@@ -48,17 +48,19 @@ const welcome = function() {
         break;
         case "Edit an Existing Department":
           editDepartment();
+        break;
         case "Edit an Existing Role":
           editRoles();
+        break;
         case "Edit an Existing Employee":
           editEmployee();
-          break;
-          case "Delete a Department":
+        break;
+        case "Delete a Department":
             deleteDepartment();
-            break;
-          case "Delete a Role":
+        break;
+        case "Delete a Role":
             deleteRoles();
-            break;
+        break;
         case "Delete an Employee":
           deleteEmployee();
           break;
@@ -71,10 +73,12 @@ const welcome = function() {
 function viewAllDepartments() {
   connection.query("SELECT * FROM department", function(err, answer) {
     console.log("\n Departments Retrieved from Database \n");
-    console.table(answer);
-  });
-  welcome();
-}
+    console.table(answer); 
+  })
+    welcome();
+  
+  };
+  
 
 function viewAllRoles() {
   connection.query("SELECT * FROM roles", function(err, answer) {
@@ -173,7 +177,7 @@ function AddNewEmployee() {
         {
           first_name: answer.firstname,
           last_name: answer.lastname,
-          role_id: null,
+          roles_id: null,
           manager_id: null
         },
         function(err, answer) {
