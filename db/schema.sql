@@ -2,10 +2,10 @@ DROP DATABASE IF EXISTS tracker_db;
 CREATE DATABASE tracker_db;
 USE tracker_db;
 
-
 DROP TABLE IF EXISTS department;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS employee;
+DROP TABLE IF EXISTS manager;
 
 CREATE TABLE department(
     id INT NOT NULL AUTO_INCREMENT,
@@ -20,19 +20,26 @@ CREATE TABLE roles(
     department_id INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE
--- REFERENCES means that the Foreign key corresponds to the primary key of the other table
--- ON DELETE CASCADE means that if this key is deleted, it will delete values on all the other tables with this key
+);
+
+CREATE TABLE manager(
+    id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
+    roles_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (roles_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 
 CREATE TABLE employee(
     id INT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
-    role_id INT NOT NULL,
-    manager_id INT, 
+    roles_id INT NOT NULL,
+    manager_id INT NOT NULL, 
     PRIMARY KEY (id),
-    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
-    FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE CASCADE
-
+    FOREIGN KEY (roles_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 
+
+ALTER TABLE employee ADD FOREIGN KEY (manager_id) REFERENCES manager(id);

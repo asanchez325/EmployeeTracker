@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "db/tracker.db -init db/schema.sql",
-    "seed": "db/tracker.db -init db/seeds.sql",
+    "seed": "node db/schema.sql",
     "db": "db/tracker.db",
     "start": "node index.js"
   },
