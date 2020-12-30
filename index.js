@@ -285,15 +285,12 @@ function viewEmployees() {
     //connection.query(`SELECT * FROM employee`,
     connection.query(`
         SELECT 
-        employee_id AS ID,
-        employee_first_name AS FirstName,
-        employee_last_name AS LastName,
-        roles_id AS Role, 
+        employee.id AS ID,
+        employee.first_name AS FirstName,
+        employee.last_name AS LastName,
+        department_id AS Department,
         manager_id AS Manager,
-        department_name AS Department,
         FROM employee
-        LEFT JOIN roles ON employee.roles_id = roles.id
-        LEFT JOIN department ON roles.department_id = department_id
         `,
        function (err, res) {
             if (err) throw err;
