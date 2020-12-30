@@ -42,4 +42,4 @@ CREATE TABLE employee(
 );
 
 
-ALTER TABLE employee ADD FOREIGN KEY (manager_id) REFERENCES manager(id);
+ALTER TABLE employee ADD FOREIGN KEY (manager_id) REFERENCES manager(id) ON DELETE CASCADE;
