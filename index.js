@@ -59,47 +59,38 @@ function dataDepartments () {
             promptTracker();
         }
     }); }
+ 
+
 function viewDepartments() {
     console.log('viewing by Department');
-    connection.query(
-        `SELECT id, department_name
-            FROM department`,
-        function (err, res) {
+        connection.query ("SELECT id, department_name FROM department", function (err, result) {
             if (err) throw err;
-            console.table(res);
+        const departmentTable = cTable.getTable(result);
+        console.log(departmentTable);
             dataDepartments();
         });
+    };
 };
-function addDepartment() {
-    return inquirer.prompt([
+function addDepartment(departmentInfo) {
+    const departmentName = departmentInfo.departmentName;
+    let query = 'INSERT into department (name) VALUES (?)';
+    let args = [departmentName];
+    const rows = connection.query(query, args);
+    console.log('Added department named ${departmentName}');
+    }
+
+function getDepartmentInfo() {
+    return inquirer
+    .prompt([
         {
-        type: 'input',
-        name: 'department_name',
-        message: 'Provide a new DEPARTMENT',
-        validate: departmentInput => {
-            if (departmentInput) {
-                return true;
-            } else {
-                console.log('Please enter a Department name!');
-                return false;
-            }
+            type: "input",
+            message: "What is the name of the new department?",
+            name: "departmentName"
         }
-        },
     ])
-        .then(storeDept => {
-            const newDept = storeDept.departmentname
-            console.log('updating Department');
-            const sql = `INSERT INTO department (department_name) VALUES (?)`;
-            const params = [newDept];
-            connection.query(sql, params, function (err, res) {
-                if (err) {
-                    console.log(err);
-                }
-                console.log(`SUCCESSFULLY added Department`);
-            });
-            dataDepartments();
-        })
-};
+}
+    
+        
 
 //Roles
 function dataRoles() {
@@ -142,9 +133,10 @@ connection.query(
         department_id AS Department
         FROM roles
         LEFT JOIN department ON roles.department_id = department.id`,
-    function (err, res) {
+    function (err, result) {
         if (err) throw err;
-        console.table(res);
+        const rolesTable = cTable.getTable(result);
+        console.log(rolesTable);
         dataRoles();
     });
 };
@@ -288,15 +280,21 @@ function viewEmployees() {
         employee.id AS ID,
         employee.first_name AS FirstName,
         employee.last_name AS LastName,
-        department_id AS Department,
-        manager_id AS Manager,
+        roles_id AS Role,
+        manager_id AS Manager
         FROM employee
+        LEFT JOIN roles ON employee.roles_id = roles.id
         `,
-       function (err, res) {
+       function (err, result) {
             if (err) throw err;
-            console.table(res);
+            const employeeTable = cTable.getTable(result);
+            console.log(employeeTable);
             dataEmployee();
-          }); }
+          }); 
+        };
+
+
+        
 function addEmployee() {
       connection.promise().query(`
       SELECT roles.id, roles.title FROM roles
@@ -355,5 +353,5 @@ function addEmployee() {
 })
 };
 
-}}
+}
 promptTracker();
