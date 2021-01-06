@@ -70,25 +70,27 @@ function viewDepartments() {
             dataDepartments();
         });
     };
-};
-function addDepartment(departmentInfo) {
-    const departmentName = departmentInfo.departmentName;
-    let query = 'INSERT into department (name) VALUES (?)';
-    let args = [departmentName];
-    const rows = connection.query(query, args);
-    console.log('Added department named ${departmentName}');
-    }
 
-function getDepartmentInfo() {
-    return inquirer
-    .prompt([
-        {
-            type: "input",
-            message: "What is the name of the new department?",
-            name: "departmentName"
+function addDepartment() {
+    inquirer.prompt({
+        type: "input",
+        name: "departmentName",
+        message: "What's the Department's name you would like to add?:",
         }
-    ])
-}
+    ).then(answer => {
+        const departmentAnswer = answer.departmentName;
+        const mysql = "INSERT INTO department (department_name) VALUES ('" + departmentAnswer + "')";
+        connection.query (mysql, function (err, result) {
+            if (err) throw err;
+        console.log("New Department Added!");
+            dataDepartments();
+        });
+    });
+
+};
+};
+
+
     
         
 
@@ -140,6 +142,26 @@ connection.query(
         dataRoles();
     });
 };
+
+function addRole() {
+    inquirer.prompt({
+        type: "input",
+        name: "roleName",
+        message: "What's the Role name you would like to add?:",
+        }
+    ).then(answer => {
+        const departmentAnswer = answer.departmentRole;
+        const mysql = "INSERT INTO roles (role.name) VALUES ('" + departmentAnswer + "')";
+        connection.query (mysql, function (err, result) {
+            if (err) throw err;
+        console.log("New Department Added!");
+            dataRoles();
+        });
+    });
+
+};
+
+
 function addRole() {
     connection.promise().query(`
     SELECT department_name, department_id FROM department
