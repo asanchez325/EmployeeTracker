@@ -49,12 +49,6 @@ function dataDepartments () {
         else if (choice.department === 'Add a New Department') {
             addDepartment();
         } 
-        else if (choice.department === 'Update an Existing Department') {
-            updateDepartment();
-        }
-        else if (choice.department === 'Remove a Department') {
-            deleteDepartment();
-        }
         else if (choice.department === 'Return to Menu') {
             promptTracker();
         }
@@ -99,8 +93,6 @@ function dataRoles() {
         message: 'What would you like to do with Roles?:',
         choices:['View ALL Roles',
                 'Add a New Role',
-                'Update an Existing Role',
-                'Remove a Role',
                 'Return to Menu']
         }
 ])
@@ -111,12 +103,6 @@ function dataRoles() {
         else if (choice.role === 'Add a New Role') {
             addRole();
         } 
-        else if (choice.role === 'Update an Existing Role') {
-            updateRole();
-        }
-        else if (choice.role === 'Remove a Role') {
-            deleteRole();
-        }
         else if (choice.role === 'Return to Menu') {
             promptTracker();
         }
@@ -177,52 +163,6 @@ connection.promise().query
     });
     })
 };
-
-function updateRole() {
-    connection.promise().query(`
-    SELECT employee.last_name, employee.id, roles.id, roles.title 
-    FROM employee
-    LEFT JOIN roles ON employee.role_id = roles.id
-    `)
-    .then(([rows])=> {
-        var employees = rows.map(({ last_name, id }) => ({
-            name: last_name,
-            value: id   
-        }))
-        var roles = rows.map(({ id, title }) => ({
-            name: title,
-            value: id
-        }))
-    })
-    console.log(rows)
-    return inquirer.prompt([
-        {
-            type: 'list',
-            name: 'employeelist',
-            message: 'Select an Employee',
-            choices: employees
-        },
-        {
-            type: 'list',
-            name: 'roleslist',
-            message: 'Select a roles',
-            choices: roles
-        }
-    ])
-    .then(({employeelist, roleslist}) => {
-        console.log('updating roles');
-        const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
-        const params = [employeelist, roleslist];
-        connection.query(sql, params, function (err, res) {
-            if (err) {
-                console.log(err);
-            }
-            console.log("Success!");
-        });
-    });
-        dataRoles();
-    } 
-
 //Employees
 function dataEmployee() {
     return inquirer.prompt([
@@ -233,7 +173,6 @@ function dataEmployee() {
         choices:['View ALL Employees',
                 'Hire (add) Employee',
                 'Update an Existing Employee',
-                'Fire (delete) Employee',
                 'Return to Menu']
         }
 ])
@@ -246,9 +185,6 @@ function dataEmployee() {
         } 
         else if (choice.employee === 'Update an Existing Employee') {
             updateEmployee();
-        }
-        else if (choice.employee === 'Fire (delete) Employee') {
-            deleteEmployee();
         }
         else if (choice.employee === 'Return to Menu') {
             promptTracker();
@@ -327,6 +263,53 @@ connection.promise().query
     })
 })
     })
-}}
+}
+
+function updateEmployee() {
+    connection.promise().query(`
+    SELECT employee.id, employee.first_name FROM employee`)
+    .then(([rows])=> {
+        var employees = rows.map(({ id, first_name }) => ({
+            name: first_name,
+            value: id   
+        }))
+    connection.promise().query(`
+    SELECT roles.id, roles.title FROM roles`)
+        .then(([rows])=> {
+            var roles = rows.map(({ id, title }) => ({
+            name: title,
+            value: id
+        }))
+    return inquirer.prompt([
+        {
+            type: 'list',
+            name: 'employeeSelect',
+            message: 'Select an Employee',
+            choices: employees
+        },
+        {
+            type: 'list',
+            name: 'rolesSelect',
+            message: 'Select a role',
+            choices: roles
+        }
+    ])
+    .then(answer => {
+        const employeesAnswer = answer.employeeSelect;
+        const rolesAnswer = answer.rolesSelect;
+        const mysql = `UPDATE employee SET employee.roles_id VALUES ?`;
+        const values = [[employeesAnswer, rolesAnswer]];
+        connection.query (mysql, [values], function (err, result) {
+            if (err) throw err;
+        console.log("Employee Role Updated!");
+            dataEmployee();
+        })
+    })
+})
+
+    });
+    } 
+
+}
 
 promptTracker();
