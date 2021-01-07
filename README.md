@@ -31,7 +31,7 @@ Allows users to be created, post thoughts, reactions to existing thoughts and ad
 
 ## Preview
 ![alt preview](assets/Capture1.gif) <br/>
-![See a demo of the Employee Tracker CLI here!](https://drive.google.com/file/d/1uXAzlNVEP4zWwIZS11bLf1WItDP10VTv/view)
+![See a demo of the Employee Tracker CLI here!](https://drive.google.com/file/d/1i-Mt_4MIwM_CDdTlyVp9JXtpUpwGqnyc/view)
 ---
 
 ## Tests
