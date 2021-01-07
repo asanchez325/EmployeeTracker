@@ -37,7 +37,7 @@ Allows users to be created, post thoughts, reactions to existing thoughts and ad
 ## Tests
 
 *Tests used and how they are ran:*
-Routes were tested in Insomnia Core, prior to being transitioned to CLI in index.js.
+* Routes were tested in Insomnia Core, prior to being transitioned to CLI in index.js.
 ---
 
 ## License
