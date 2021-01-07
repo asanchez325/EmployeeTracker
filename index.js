@@ -37,8 +37,6 @@ function dataDepartments () {
         message: 'What would you like to do with Departments?:',
         choices:['View ALL Departments',
                 'Add a New Department',
-                'Update an Existing Department',
-                'Remove a Department',
                 'Return to Menu']
         }
 ])
@@ -198,7 +196,7 @@ function viewEmployees() {
         employee.id AS ID,
         employee.first_name AS FirstName,
         employee.last_name AS LastName,
-        roles_ AS Role,
+        roles_id AS Role,
         manager_id AS Manager
         FROM employee
         LEFT JOIN roles ON employee.roles_id = roles.id
